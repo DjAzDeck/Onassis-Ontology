@@ -1,0 +1,361 @@
+@prefix : <http://ontology.tno.nl/onassis#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://ontology.tno.nl/onassis> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<http://ontology.tno.nl/onassis> rdf:type owl:Ontology ;
+                                 dc:creator "Giulia Biagioni, Georgios Stathis, Bart Custers, Athanasios Trantas, Jaap van den Herik, Laura Daniele, Theofilos Katsigiannis";
+                                 dcterms:description "This ontology contains classes and properties to model contractual data and legal agreements.".
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://ontology.tnl.nl/onassis#writes
+<http://ontology.tnl.nl/onassis#writes> rdf:type owl:ObjectProperty ;
+                                        rdfs:domain :LegalExpert ;
+                                        rdfs:range :Question ;
+                                        rdfs:comment "The relationship that connects a legal expert to the question that he/she/it writes"@en ;
+                                        rdfs:label "Writes"@en .
+
+
+###  http://ontology.tno.nl/onassis#agreementInvolvedIn
+:agreementInvolvedIn rdf:type owl:ObjectProperty ;
+                     rdfs:domain <http://ontology.tno.nl/onassis/Agreement> ;
+                     rdfs:range [ rdf:type owl:Class ;
+                                  owl:unionOf ( :Answer
+                                                :Question
+                                              )
+                                ] ;
+                     rdfs:comment "The relationship linking the question of a legal expert  and the answer of a contractor to the agreement"@en ;
+                     rdfs:label "Agreement Involved In"@en .
+
+
+###  http://ontology.tno.nl/onassis#answerContainedIn
+:answerContainedIn rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Answer ;
+                   rdfs:range [ rdf:type owl:Class ;
+                                owl:unionOf ( :Contract
+                                              :Paragraph
+                                              :Section
+                                              :Variable
+                                            )
+                              ] ;
+                   rdfs:comment "The relationship between the answer of the contractor and the (various parts of the) contract"@en ;
+                   rdfs:label "Answer Contained In"@en .
+
+
+###  http://ontology.tno.nl/onassis#answerProvidedBy
+:answerProvidedBy rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdfs:domain :Answer ;
+                  rdfs:range :Contractor ;
+                  rdfs:comment "The relationship between the answer and the contractor providing that specific answer"@en ;
+                  rdfs:label "Answer Provided By"@en .
+
+
+###  http://ontology.tno.nl/onassis#defines
+:defines rdf:type owl:ObjectProperty ;
+         rdfs:domain :LegalExpert ;
+         rdfs:range [ rdf:type owl:Class ;
+                      owl:unionOf ( :Contract
+                                    :Risk
+                                    :Scope
+                                  )
+                    ] ;
+         rdfs:comment "The relationship linking a legal expert to the risk, scope and contract that he/she/it defines"@en ;
+         rdfs:label "Defines"@en .
+
+
+###  http://ontology.tno.nl/onassis#hasAnswer
+:hasAnswer rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdfs:domain :Question ;
+           rdfs:comment "The relationship between the question and the answer"@en ;
+           rdfs:label "Has Answer"@en .
+
+
+###  http://ontology.tno.nl/onassis#hasOrderNumber
+:hasOrderNumber rdf:type owl:ObjectProperty ;
+                rdfs:domain [ rdf:type owl:Class ;
+                              owl:unionOf ( :Paragraph
+                                            :Section
+                                            :Variable
+                                          )
+                            ] ;
+                rdfs:range <http://www.ontology-of-units-of-measure.org/resource/om-2/Measure> ;
+                rdfs:comment "The linking the paragraphs, sections and variables to a om:measure"@en ;
+                rdfs:label "Has Order Number"@en .
+
+
+###  http://ontology.tno.nl/onassis#hasRisk
+:hasRisk rdf:type owl:ObjectProperty ;
+         rdfs:domain [ rdf:type owl:Class ;
+                       owl:unionOf ( :Contract
+                                     :Scope
+                                     <http://ontology.tno.nl/onassis/Agreement>
+                                   )
+                     ] ;
+         rdfs:range :Risk ;
+         rdfs:comment "The property linking the agreement, contract and scope to the risk"@en ;
+         rdfs:label "Has Risk"@en .
+
+
+###  http://ontology.tno.nl/onassis#hasTopic
+:hasTopic rdf:type owl:ObjectProperty ;
+          rdfs:domain :Section ;
+          rdfs:range :SectionTopic ;
+          rdfs:label "Has Topic"@en ;
+          rdfs:comment "The relationship linking a section (article) to its topic"@en .
+
+
+###  http://ontology.tno.nl/onassis#involvedInContract
+:involvedInContract rdf:type owl:ObjectProperty ;
+                    rdfs:domain :Contract ;
+                    rdfs:range <http://ontology.tno.nl/onassis/Agreement> ;
+                    rdfs:comment "The relationship between the contract and the agreements on the variables that are involved in a contract"@en ;
+                    rdfs:label "Agreement in Contract"@en .
+
+
+###  http://ontology.tno.nl/onassis#involvesParties
+:involvesParties rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:domain <http://ontology.tno.nl/onassis/Agreement> ;
+                 rdfs:range <http://xmlns.com/foaf/0.1/Agent> ;
+                 rdfs:comment "The relationsip between the agreement and the parties involved"@en ;
+                 rdfs:label "Involves Parties"@en .
+
+
+###  http://ontology.tno.nl/onassis#involvesScope
+:involvesScope rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               rdfs:domain [ rdf:type owl:Class ;
+                             owl:unionOf ( :Contract
+                                           :Question
+                                           <http://ontology.tno.nl/onassis/Agreement>
+                                         )
+                           ] ;
+               rdfs:range :Scope ;
+               rdfs:comment "The property linking the agreement, contract and question to a scope"@en ;
+               rdfs:label "Involves Scope"@en .
+
+
+###  http://ontology.tno.nl/onassis#isRelatedTo
+:isRelatedTo rdf:type owl:ObjectProperty ;
+             rdfs:domain owl:Thing ;
+             rdfs:range owl:Thing ;
+             rdfs:comment "This property can be used to establish relationships among contracts and the various parts of a contract"@en ;
+             rdfs:label "Is Related To"@en .
+
+
+###  http://ontology.tno.nl/onassis#regulatedByRule
+:regulatedByRule rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:domain :Paragraph ;
+                 rdfs:range :LegalRule ;
+                 rdfs:comment "The relationship between the paragraph and the rule"@en ;
+                 rdfs:label "Regulated by Rule"@en .
+
+
+###  http://ontology.tno.nl/onassis#replies
+:replies rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdfs:domain :Contractor ;
+         rdfs:range :Question ;
+         rdfs:comment "The relationship between a contractor and the question that he/she/it replies to"@en ;
+         rdfs:label "Replies"@en .
+
+
+###  http://ontology.tno.nl/onassis#selectsScope
+:selectsScope rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdfs:domain :Contractor ;
+              rdfs:range :Scope ;
+              rdfs:comment "The relationship between the contractor and the scope selected by the contractor"@en ;
+              rdfs:label "Selects Scope"@en .
+
+
+###  http://ontology.tno.nl/onassis#signatureBelongingTo
+:signatureBelongingTo rdf:type owl:ObjectProperty ;
+                      rdfs:domain :Signature ;
+                      rdfs:range <http://xmlns.com/foaf/0.1/Agent> ;
+                      rdfs:comment "The relationship between a person and her/ his /its signature"@en ;
+                      rdfs:label "Signature Belonging To"@en .
+
+
+###  http://ontology.tno.nl/onassis#signatureOnContract
+:signatureOnContract rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Signature ;
+                     rdfs:range :Contract ;
+                     rdfs:comment "the relationship between a signature and the signed contract"@en ;
+                     rdfs:label "Signature on Contract"@en .
+
+
+###  http://www.ontology-of-units-of-measure.org/resource/om-2/hasUnit
+<http://www.ontology-of-units-of-measure.org/resource/om-2/hasUnit> rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://ontology.tno.nl/onassis#NaturalLanguageExpression
+:NaturalLanguageExpression rdf:type owl:DatatypeProperty ;
+                           rdfs:domain owl:Thing ;
+                           rdfs:range rdfs:Literal ;
+                           rdfs:comment "The relationship between the URI/IRI of an article tile and the title of an article expressed in natural language"@en .
+
+
+###  http://purl.org/goodrelations/v1#vatID
+<http://purl.org/goodrelations/v1#vatID> rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://ontology.tno.nl/onassis#Answer
+:Answer rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :answerContainedIn ;
+                          owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Contract
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :answerContainedIn ;
+                          owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Paragraph
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :answerContainedIn ;
+                          owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Section
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :answerContainedIn ;
+                          owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Variable
+                        ] ,
+                        [ rdf:type owl:Restriction ;
+                          owl:onProperty :answerProvidedBy ;
+                          owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Contractor
+                        ] ;
+        rdfs:comment "The answer provided by the contractor"@en ;
+        rdfs:label "Answer"@en .
+
+
+###  http://ontology.tno.nl/onassis#Contract
+:Contract rdf:type owl:Class ;
+          rdfs:comment "The legal contract"@en ;
+          rdfs:label "Contract"@en .
+
+
+###  http://ontology.tno.nl/onassis#Contractor
+:Contractor rdf:type owl:Class ;
+            rdfs:subClassOf <http://xmlns.com/foaf/0.1/Agent> ;
+            owl:disjointWith :LegalExpert ;
+            rdfs:comment "Agent who is interested in executing a contract"@en ;
+            rdfs:label "Contractor"@en .
+
+
+###  http://ontology.tno.nl/onassis#LegalExpert
+:LegalExpert rdf:type owl:Class ;
+             rdfs:subClassOf <http://xmlns.com/foaf/0.1/Agent> ;
+             rdfs:comment "Agent who is responsible for contract knowledge management"@en ;
+             rdfs:label "Legal Expert"@en .
+
+
+###  http://ontology.tno.nl/onassis#LegalRule
+:LegalRule rdf:type owl:Class ;
+           rdfs:comment "The rule regulating the paragrahs in a contract" ;
+           rdfs:label "Legal Rule"@en .
+
+
+###  http://ontology.tno.nl/onassis#Paragraph
+:Paragraph rdf:type owl:Class ;
+           rdfs:comment "The paragraph of a section"@en ;
+           rdfs:label "Paragraph"@en .
+
+
+###  http://ontology.tno.nl/onassis#Question
+:Question rdf:type owl:Class ;
+          rdfs:comment "The question asked by a legal expert"@en ;
+          rdfs:label "Question"@en .
+
+
+###  http://ontology.tno.nl/onassis#Risk
+:Risk rdf:type owl:Class ;
+      rdfs:comment "The potential risk of the agreement"@en ;
+      rdfs:label "Risk"@en .
+
+
+###  http://ontology.tno.nl/onassis#Scope
+:Scope rdf:type owl:Class ;
+       rdfs:comment "Scope of an agreement / contract"@en ;
+       rdfs:label "Scope"@en .
+
+
+###  http://ontology.tno.nl/onassis#Section
+:Section rdf:type owl:Class ;
+         rdfs:comment "The section of a contract"@en ;
+         rdfs:label "Section"@en .
+
+
+###  http://ontology.tno.nl/onassis#SectionTopic
+:SectionTopic rdf:type owl:Class ;
+              rdfs:comment "The topic of a section (article) in a contract"@en ;
+              rdfs:label "Section Topic"@en .
+
+
+###  http://ontology.tno.nl/onassis#Signature
+:Signature rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty :signatureBelongingTo ;
+                             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass <http://xmlns.com/foaf/0.1/Agent>
+                           ] ;
+           rdfs:comment "The signature of a person"@en ;
+           rdfs:label "Signature"@en .
+
+
+###  http://ontology.tno.nl/onassis#Variable
+:Variable rdf:type owl:Class ;
+          rdfs:comment "Element in a paragraph"@en ;
+          rdfs:label "Variable"@en .
+
+
+###  http://ontology.tno.nl/onassis/Agreement
+<http://ontology.tno.nl/onassis/Agreement> rdf:type owl:Class ;
+                                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                             owl:onProperty :agreementInvolvedIn ;
+                                                             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                             owl:onClass :Answer
+                                                           ] ,
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty :agreementInvolvedIn ;
+                                                             owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                             owl:onClass :Question
+                                                           ] ;
+                                           rdfs:comment "The agreement regarding a particular variable in a paragraph of a contract"@en ;
+                                           rdfs:label "Agreement"@en .
+
+
+###  http://www.ontology-of-units-of-measure.org/resource/om-2/Measure
+<http://www.ontology-of-units-of-measure.org/resource/om-2/Measure> rdf:type owl:Class .
+
+
+###  http://www.ontology-of-units-of-measure.org/resource/om-2/Unit
+<http://www.ontology-of-units-of-measure.org/resource/om-2/Unit> rdf:type owl:Class .
+
+
+###  http://xmlns.com/foaf/0.1/Agent
+<http://xmlns.com/foaf/0.1/Agent> rdf:type rdfs:Class .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
